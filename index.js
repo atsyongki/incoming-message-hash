@@ -36,8 +36,13 @@ function updateHash(hash, req, ignore) {
   var parts = url.parse(req.url, true);
 
   if (ignore) {
-    for (let param in ignore) {
-      delete parts.query[ignore[param]];
+    if(Array.isArray(ignore)){
+      for (let param in ignore) {
+        delete parts.query[ignore[param]];
+      }
+    }
+    else {
+      parts.query = {};
     }
   }
 
@@ -45,7 +50,7 @@ function updateHash(hash, req, ignore) {
   hash.update(req.method);
   hash.update(parts.pathname);
   hash.update(JSON.stringify(sort(parts.query)));
-  hash.update(JSON.stringify(sort(req.headers)));
+  // hash.update(JSON.stringify(sort(req.headers)));
   hash.update(JSON.stringify(sort(req.trailers)));
 }
 
